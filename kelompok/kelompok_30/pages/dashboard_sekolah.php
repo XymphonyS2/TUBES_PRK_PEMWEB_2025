@@ -9,7 +9,6 @@ require_once __DIR__ . '/../config/database.php';
 $conn = koneksiDatabase();
 $sekolah_id = $_SESSION['user_id'];
 
-// Statistik
 $jadwal_minggu_ini = $conn->query("SELECT COUNT(*) as total FROM jadwal WHERE sekolah_id = $sekolah_id AND tanggal >= CURDATE() AND tanggal <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)")->fetch_assoc()['total'];
 $pengiriman_hari_ini = $conn->query("SELECT COUNT(*) as total FROM pengiriman WHERE sekolah_id = $sekolah_id AND tanggal_pengiriman = CURDATE()")->fetch_assoc()['total'];
 $keluhan_dibuat = $conn->query("SELECT COUNT(*) as total FROM keluhan WHERE sekolah_id = $sekolah_id")->fetch_assoc()['total'];

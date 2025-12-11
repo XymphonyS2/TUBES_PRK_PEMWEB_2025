@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 require_once __DIR__ . '/../config/auth.php';
 cekRole(['dokter']);
 $page_title = 'Review Menu';
@@ -116,11 +118,11 @@ $conn->close();
                     </div>
                 </div>
                 
-                <form method="POST" class="mt-6 border-t border-gray-200 pt-6">
+                <form method="POST" class="mt-6 border-t border-gray-200 pt-6" onsubmit="return validateForm(this)">
                     <input type="hidden" name="menu_id" value="<?php echo $menu['id']; ?>">
                     
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Catatan/Alasan (wajib jika ditolak)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Catatan/Alasan <span class="text-red-500">*</span> <span class="text-xs text-gray-500">(wajib jika ditolak)</span></label>
                         <textarea name="pesan" rows="3" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-gray-50 hover:bg-white" placeholder="Tuliskan review gizi atau alasan penolakan..."></textarea>
                     </div>
                     
@@ -139,7 +141,40 @@ $conn->close();
     <?php endif; ?>
 </div>
 
+<script>
+function validateForm(form) {
+    const action = form.querySelector('button[type="submit"]:focus')?.value || 
+                   event.submitter?.value || 
+                   form.querySelector('input[name="action"]')?.value;
+    const pesan = form.querySelector('textarea[name="pesan"]').value.trim();
+    
+    if (action === 'reject' && pesan === '') {
+        alert('Catatan/alasan wajib diisi jika menu ditolak!');
+        form.querySelector('textarea[name="pesan"]').focus();
+        return false;
+    }
+    
+    const confirmMessage = action === 'approve' 
+        ? 'Apakah Anda yakin ingin menyetujui menu ini?' 
+        : 'Apakah Anda yakin ingin menolak menu ini?';
+    
+    return confirm(confirmMessage);
+}
+
+document.querySelectorAll('button[name="action"]').forEach(button => {
+    button.addEventListener('click', function() {
+        this.form.querySelector('input[name="action"]')?.remove();
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'action';
+        hiddenInput.value = this.value;
+        this.form.appendChild(hiddenInput);
+    });
+});
+</script>
+
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
     </main>
 </div>
 
+<?php ob_end_flush();?>

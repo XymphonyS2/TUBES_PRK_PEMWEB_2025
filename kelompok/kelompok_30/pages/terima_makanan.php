@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/auth.php';
 cekRole(['sekolah']);
-$page_title = 'Terima Makanan';
-require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/sidebar.php';
 require_once __DIR__ . '/../config/database.php';
 
 $conn = koneksiDatabase();
@@ -44,6 +41,10 @@ $pengiriman_diterima = $conn->query("
 ")->fetch_all(MYSQLI_ASSOC);
 
 $conn->close();
+
+$page_title = 'Terima Makanan';
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <?php if (isset($_GET['success'])): ?>
@@ -176,4 +177,3 @@ $conn->close();
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
     </main>
 </div>
-

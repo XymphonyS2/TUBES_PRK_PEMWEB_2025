@@ -9,7 +9,6 @@ require_once __DIR__ . '/../config/database.php';
 $conn = koneksiDatabase();
 $vendor_id = $_SESSION['user_id'];
 
-// Statistik
 $menu_pending = $conn->query("SELECT COUNT(*) as total FROM menu WHERE vendor_id = $vendor_id AND status = 'pending'")->fetch_assoc()['total'];
 $menu_disetujui = $conn->query("SELECT COUNT(*) as total FROM menu WHERE vendor_id = $vendor_id AND status = 'disetujui'")->fetch_assoc()['total'];
 $menu_ditolak = $conn->query("SELECT COUNT(*) as total FROM menu WHERE vendor_id = $vendor_id AND status = 'ditolak'")->fetch_assoc()['total'];
